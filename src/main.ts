@@ -1,4 +1,5 @@
 import './assets/index.css'
+import 'leaflet/dist/leaflet.css'
 
 import { createApp } from 'vue'
 import { retrieveLaunchParams } from '@telegram-apps/sdk-vue'

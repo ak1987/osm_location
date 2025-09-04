@@ -7,7 +7,7 @@ import mkcert from 'vite-plugin-mkcert'
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: '/vuejs-template',
+  base: '/osm_location/',
   plugins: [
     vue(),
     vueDevTools(),

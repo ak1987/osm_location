@@ -5,12 +5,21 @@ import ThemeParamsPage from '@/pages/ThemeParamsPage.vue';
 import LaunchParamsPage from '@/pages/LaunchParamsPage.vue';
 import TonConnectPage from '@/pages/TonConnectPage.vue';
 import IconTonConnect from '@/components/IconTonConnect.vue';
+import LocationMapPage from '@/pages/LocationMapPage.vue';
 
 export const routes = [
   {
     path: '/',
     name: 'index',
     component: IndexPage,
+  },
+  {
+    path: '/location-map',
+    name: 'location-map',
+    component: LocationMapPage,
+    meta: {
+      title: 'Location Map',
+    },
   },
   {
     path: '/init-data',
