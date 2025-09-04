@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { onMounted, onBeforeUnmount, ref } from 'vue';
-import AppPage from '../components/AppPage.vue';
 import { locationManager } from '@telegram-apps/sdk';
 import L from 'leaflet';
 
@@ -58,7 +57,6 @@ async function mountLM() {
 async function requestLocationOnce() {
   lastError.value = null;
   if (!isSupported || !locationManager.requestLocation.isAvailable()) {
-    // Fallback to browser geolocation when outside Telegram.
     return requestBrowserGeolocation();
   }
   try {
@@ -95,10 +93,7 @@ function requestBrowserGeolocation() {
 
 onMounted(async () => {
   await mountLM();
-  if (isMounted.value) {
-    // Auto-request once after a successful mount to prompt permission.
-    void requestLocationOnce();
-  }
+  if (isMounted.value) void requestLocationOnce();
 });
 
 onBeforeUnmount(() => {
@@ -113,28 +108,26 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <AppPage title="Location Map">
-    <div v-if="!isSupported">Location Manager is not supported in this environment.</div>
-    <div v-else>
-      <div style="display:flex;gap:8px;margin-bottom:8px;">
-        <button @click="requestLocationOnce">Request Location</button>
-        <button @click="openSettings">Open Settings</button>
-        <button @click="requestBrowserGeolocation">Try Browser Geolocation</button>
-      </div>
-      <div style="margin-bottom:6px; font-size: 12px; opacity: .8;">
-        <div>supported: {{ String(isSupported) }}</div>
-        <div>mounting: {{ String(isMounting) }}</div>
-        <div>mounted: {{ String(isMounted) }}</div>
-      </div>
-      <div v-if="isMounting">Mounting location manager…</div>
-      <div v-if="mountError" style="color: var(--tgui-text-color-destructive);">{{ String(mountError) }}</div>
-      <div v-if="lastError" style="color: var(--tgui-text-color-destructive);">{{ lastError }}</div>
-      <div ref="mapContainer" style="height:75vh;width:100%;border-radius:12px;overflow:hidden;background:#e9ecef;" />
-      <div style="margin-top:8px; font-size:12px; opacity:.75;">
-        Tip: Permission prompt appears only after user interaction and only inside Telegram apps. See docs.
-      </div>
+  <div>
+    <div style="display:flex;gap:8px;margin-bottom:8px;">
+      <button @click="requestLocationOnce">Request Location</button>
+      <button @click="openSettings">Open Settings</button>
+      <button @click="requestBrowserGeolocation">Try Browser Geolocation</button>
     </div>
-  </AppPage>
+    <div style="margin-bottom:6px; font-size: 12px; opacity: .8;">
+      <div>supported: {{ String(isSupported) }}</div>
+      <div>mounting: {{ String(isMounting) }}</div>
+      <div>mounted: {{ String(isMounted) }}</div>
+    </div>
+    <div v-if="isMounting">Mounting location manager…</div>
+    <div v-if="mountError" style="color: var(--tgui-text-color-destructive);">{{ String(mountError) }}</div>
+    <div v-if="lastError" style="color: var(--tgui-text-color-destructive);">{{ lastError }}</div>
+    <div ref="mapContainer" style="height:65vh;width:100%;border-radius:12px;overflow:hidden;background:#e9ecef;" />
+    <div style="margin-top:8px; font-size:12px; opacity:.75;">
+      Tip: Permission prompt appears only after user interaction and only inside Telegram apps.
+    </div>
+  </div>
+  
 </template>
 
 <style scoped>
